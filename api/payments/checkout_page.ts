@@ -55,7 +55,7 @@ module.exports = async (req: any, res: any) => {
           {
             name: 'AcampaKids 2025',
             quantity: 1,
-            unit_amount: 21000,
+            unit_amount: 25000,
           }
         ],
         payment_methods: [
