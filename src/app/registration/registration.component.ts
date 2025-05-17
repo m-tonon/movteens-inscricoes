@@ -89,23 +89,27 @@ export class RegistrationComponent implements OnInit {
   referenceId: string = this.generateReferenceId();
 
   campInfo = {
-    name: '5º Acampa Kids',
-    dates: '03, 04 e 05 de outubro de 2025',
+    name: '2º ACAMPA TEENS',
+    dates: '31 de outubro, 01 e 02 de novembro',
     location: 'Acampamento Evangélico Maanaim',
-    price: 210.0,
-    minAge: 6,
-    maxAge: 11,
+    price: 250.0,
+    minAge: 12,
+    maxAge: 16,
     preletor: {
-      name: 'Marcus Nati',
+      name: 'TBD',
       description:
-        'Teólogo, pregador, presbítero, desenhista, designer e criador do perfil <a href="https://www.instagram.com/brother_biblia" target="_blank">@brother_biblia</a>',
+        '',
     },
     contacts: [
       { name: 'Secretaria IPVO', phone: '(44) 3226-4473' },
       { name: 'Anjinho', phone: '(44) 9 9846-0089' },
     ],
     description:
-      'Está chegando o IPVO Acampa MovTeens, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.',
+      `
+        Está chegando o <b>IPVO Acampa Teens</b>, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.<br/><br/>
+        Garanta a sua vaga e lembre-se de convidar algum amigo !<br/><br/>
+        ⚠️ <b>Importante:</b> Sua vaga só está garantida mediante pagamento.
+      `,
     paymentOptions: {
       methods: ['PIX', 'Cartão de Crédito', 'Cartão de Débito'],
       maxInstallments: 10,
@@ -130,7 +134,7 @@ export class RegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       name: ['', Validators.required],
       birthDate: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(this.campInfo.minAge), Validators.max(12)]],
+      age: ['', [Validators.required, Validators.min(11), Validators.max(this.campInfo.maxAge)]],
       gender: ['', Validators.required],
       identityDocument: ['', Validators.required],
       address: [''],

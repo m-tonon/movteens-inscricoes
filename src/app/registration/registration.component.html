@@ -11,7 +11,7 @@
         <!-- Step 1: Camp Information and Acknowledgment -->
         <nb-step [stepControl]="acknowledgmentForm" label="Informações">
           <div class="camp-info">
-            <p class="description">{{ campInfo.description }}</p>
+            <p class="description" [innerHTML]="campInfo.description"></p>
 
             <div class="info-grid">
               <div class="info-item">
@@ -83,6 +83,7 @@
 
             <div class="button-row">
               <button
+                class="next-button"
                 nbButton
                 status="primary"
                 nbStepperNext
@@ -374,9 +375,9 @@
                 formControlName="parentalAuthorization"
                 [status]="getFieldStatus('parentalAuthorization')"
               >
-                Autorizo o menor citado acima a participar do evento ACAMPS VILA
-                KIDS no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu - PR,
-                87160-000, no período de 03 a 05 de outubro de 2025. Esta
+                Autorizo o menor citado acima a participar do evento 2º ACAMPA TEENS 
+                no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu - PR,
+                87160-000, no período de 31 de outubro a 02 de novembro. Esta
                 autorização está de acordo com o ECA (lei 8.069/90).
               </nb-checkbox>
               @if (getFieldStatus('parentalAuthorization') === 'danger') {
@@ -390,6 +391,7 @@
           <div class="button-row">
             <button nbButton status="basic" nbStepperPrevious>Voltar</button>
             <button
+              class="next-button"
               nbButton
               status="primary"
               nbStepperNext
@@ -442,6 +444,7 @@
                 </p>
                 <div class="button-container">
                   <button
+                    class="next-button"
                     nbButton
                     status="primary"
                     (click)="openPaymentPage()"
