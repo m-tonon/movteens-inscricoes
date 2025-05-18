@@ -2,12 +2,13 @@ import dotenv from 'dotenv';
 import { PagBankCharge } from '../../shared/types';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
-import { Resend } from 'resend';
 import { confirmationTemplate } from './confirmation-email-template';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
-const RESEND_API_KEY = process.env['RESEND_API_KEY'];
+const GMAIL_USER = process.env['GMAIL_USER'];
+const GMAIL_APP_PASS = process.env['GMAIL_APP_PASS'];
 
 module.exports = async (req: any, res: any) => {
   try {
@@ -60,11 +61,18 @@ module.exports = async (req: any, res: any) => {
 
 async function sendConfirmationEmail(participant: any) {
   const html = confirmationTemplate.replace('{{nomeParticipante}}', participant.name);
-  const resend = new Resend(RESEND_API_KEY);
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+      auth: {
+        user: GMAIL_USER,
+        pass: GMAIL_APP_PASS,
+      },
+    }
+  );
 
   try {
-    await resend.emails.send({
-      from: '"IPVO MovTeens" <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: `"IPVO MovTeens" <${GMAIL_USER}>`,
       to: participant.email,
       subject: '✅ Inscrição confirmada no 2º Acampa Teens!',
       html: html,
