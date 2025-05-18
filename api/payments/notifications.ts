@@ -59,7 +59,7 @@ module.exports = async (req: any, res: any) => {
   }
 };
 
-export async function sendConfirmationEmail(participant: any) {
+async function sendConfirmationEmail(participant: any) {
   const rawHtml = await fs.readFile(
     path.join(process.cwd(), 'templates', 'confirmation.html'),
     'utf8'
