@@ -2,8 +2,13 @@ import dotenv from 'dotenv';
 import { PagBankCharge } from '../../shared/types';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { Resend } from 'resend';
 
 dotenv.config();
+
+const RESEND_API_KEY = process.env['RESEND_API_KEY'];
 
 module.exports = async (req: any, res: any) => {
   try {
@@ -35,6 +40,17 @@ module.exports = async (req: any, res: any) => {
       return;
     }
 
+    const participant = {
+      name: updated.name,
+      email: updated.responsibleInfo?.email,
+    };
+
+    if (!participant.email) {
+      console.warn('No email found for participant', participant.name);
+    } else {
+      await sendConfirmationEmail(participant);
+    }
+
     console.log(`Payment confirmed and MongoDB updated for ${referenceId}`);
     res.status(200).send('Payment handled');
   } catch (error) {
@@ -42,3 +58,26 @@ module.exports = async (req: any, res: any) => {
     res.status(500).send('Error updating payment status in MongoDB');
   }
 };
+
+export async function sendConfirmationEmail(participant: any) {
+  const rawHtml = await fs.readFile(
+    path.join(process.cwd(), 'templates', 'confirmation.html'),
+    'utf8'
+  );
+
+  const html = rawHtml.replace('{{nomeParticipante}}', participant.name);
+
+  const resend = new Resend(RESEND_API_KEY);
+
+  try {
+    await resend.emails.send({
+      from: '"IPVO MovTeens" <onboarding@resend.dev>',
+      to: participant.email,
+      subject: '✅ Inscrição confirmada no 2º Acampa Teens!',
+      html: html,
+    });
+    console.log('Confirmation email sent');
+  } catch (emailError) {
+    console.error('Failed to send confirmation email:', emailError);
+  }
+}

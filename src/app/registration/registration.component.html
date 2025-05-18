@@ -476,11 +476,13 @@
     <h2>Inscrição realizada com sucesso!</h2>
     <p>
       Seu pagamento ainda está em processo de confirmação.<br />
-      Por favor, aguarde a validação e o contato da nossa equipe com as próximas
-      instruções.
+    </p>
+    <p>
+      Enviaremos um email para confirmar a sua inscrição assim que o pagamento for validado.<br /><br />
+      <strong>Lembre-se:</strong> verifique também a sua caixa de spam para garantir que não perca nossa mensagem.
     </p>
     <br />
-    <p>Em caso de dúvidas, entre em contato com:</p>
+    <p>Em caso de dúvidas, entre em contato com nossa equipe:</p>
     @for (contact of campInfo.contacts; track contact.phone) {
     <p>
       <strong>{{ contact.name }}:</strong> {{ contact.phone }}
