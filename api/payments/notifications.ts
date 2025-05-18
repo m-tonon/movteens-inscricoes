@@ -2,9 +2,8 @@ import dotenv from 'dotenv';
 import { PagBankCharge } from '../../shared/types';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import { Resend } from 'resend';
+import { confirmationTemplate } from './confirmation-email-template';
 
 dotenv.config();
 
@@ -60,13 +59,7 @@ module.exports = async (req: any, res: any) => {
 };
 
 async function sendConfirmationEmail(participant: any) {
-  const rawHtml = await fs.readFile(
-    path.join(process.cwd(), 'templates', 'confirmation.html'),
-    'utf8'
-  );
-
-  const html = rawHtml.replace('{{nomeParticipante}}', participant.name);
-
+  const html = confirmationTemplate.replace('{{nomeParticipante}}', participant.name);
   const resend = new Resend(RESEND_API_KEY);
 
   try {

@@ -1,3 +1,5 @@
+
+export const confirmationTemplate = `
 <!doctype html>
 <html lang="pt-BR">
   <head>
@@ -153,3 +155,4 @@
     </table>
   </body>
 </html>
+`
