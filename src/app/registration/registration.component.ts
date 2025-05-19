@@ -96,9 +96,10 @@ export class RegistrationComponent implements OnInit {
     minAge: 12,
     maxAge: 16,
     preletor: {
-      name: 'TBD',
+      name: 'Juliano Pereira Freie (Juba)',
       description:
-        '',
+        `Pastor auxiliar da Primeira IPI de Marília, Juba atua no ministério há mais de 20 anos. Apaixonado por gente,
+        trabalha principalmente com adolescentes e jovens. É casado com Renata e pai de Júlia e Victor Hugo.`,
     },
     contacts: [
       { name: 'Secretaria IPVO', phone: '(44) 3226-4473' },
