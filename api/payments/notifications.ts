@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { PagBankCharge } from '../../shared/types';
+import { PagBankCharge } from '../../shared/payment.interface';
 import { connectToDatabase } from '../mongoose-connection';
 import { RegistrationModel } from '../../shared/models/registration.model';
 import { confirmationTemplate } from './confirmation-email-template';

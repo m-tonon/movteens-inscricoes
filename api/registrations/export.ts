@@ -36,6 +36,12 @@ module.exports = async (req: any, res: any) => {
       updatedAt: r.updatedAt,
     }));
 
+    if (req.query && (req.query.json === '1' || req.query.json === 1)) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(flatRegistrations);
+      return;
+    }
+
     const fields = [
       { label: 'Nome do Adolescente', value: 'name' },
       { label: 'Data de Nascimento', value: 'birthDate' },
