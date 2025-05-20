@@ -1,0 +1,74 @@
+@use '@nebular/theme/styles/theming' as *;
+@use '@angular/material' as mat;
+
+@include nb-install-component();
+
+.admin-container {
+  max-width: 75rem;
+  margin: 0.5rem auto;
+  padding: 0 0.75rem;
+
+  nb-card {
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+}
+
+.table-wrapper {
+  margin-top: 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 1rem;
+  margin-top: 2rem;
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  text-align: left;
+}
+
+.table th {
+  background: #f5f6fa;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.table tr {
+  transition: background 0.2s;
+}
+
+.table tbody tr:hover {
+  background: #f0f4ff;
+}
+
+.table td {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.spinner {
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: orange,
+      size: 2rem,
+    )
+  );
+
+  justify-items: center;
+  height: 5rem;
+}

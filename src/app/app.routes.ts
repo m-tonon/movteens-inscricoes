@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: RegistrationComponent },
-  { path: 'register', component: RegistrationComponent }
+  { path: 'register', component: RegistrationComponent },
+  { path: 'admin', component: AdminDashboardComponent },
 ];

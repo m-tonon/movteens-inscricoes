@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RegistrationFormData, SaveRegistrationResponse } from '../../../shared/types';
+import { ExportedRegistration, RegistrationFormData, SaveRegistrationResponse } from '../../../shared/registration.interface';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -17,5 +17,10 @@ export class RegistrationService {
     const url = `${this.apiUrl}/save-registration`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(url, registrationForm, { headers, withCredentials: true });
+  }
+
+  retrieveRegistrations(): Observable<ExportedRegistration[]> {
+    const url = `${this.apiUrl}/export?json=1`;
+    return this.http.get<ExportedRegistration[]>(url, { withCredentials: true });
   }
 }
