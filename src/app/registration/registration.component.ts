@@ -33,12 +33,11 @@ import {
 import { RegistrationService } from '../services/registration.service';
 import { PaymentService } from '../services/payment.service';
 import {
-  AppApiError,
-  PagBankResponse,
   PaymentData,
   RegistrationFormData,
   SaveRegistrationResponse,
-} from '../../../shared/types';
+} from '../../../shared/registration.interface';
+import { AppApiError, PagBankResponse } from '../../../shared/payment.interface';
 import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { switchMap } from 'rxjs';
