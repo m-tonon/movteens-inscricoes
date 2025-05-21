@@ -23,4 +23,9 @@ export class RegistrationService {
     const url = `${this.apiUrl}/export?json=1`;
     return this.http.get<ExportedRegistration[]>(url, { withCredentials: true });
   }
+
+  exportRegistrations(): Observable<Blob> {
+    const url = `${this.apiUrl}/export?json=0`;
+    return this.http.get(url, { responseType: 'blob', withCredentials: true });
+  }
 }

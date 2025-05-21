@@ -1,5 +1,17 @@
 <div class="table-wrapper">
-  <h2>Registrations Data</h2>
+  <div class="table-header">
+    <h2>Inscrições</h2>
+    <ng-container>
+      <button
+        nbButton
+        status="success"
+        size="small"
+        (click)="exportToCSV()"
+      >
+        Exportar CSV
+      </button>
+    </ng-container>
+  </div>
   <table class="table">
     <thead>
       <tr>

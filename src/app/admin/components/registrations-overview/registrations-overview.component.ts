@@ -60,4 +60,20 @@ export class RegistrationsOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.registrations$ = this.registrationService.retrieveRegistrations();
   }
+
+  exportToCSV(): void {
+    this.registrationService.exportRegistrations().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'inscricoes2025.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Failed to export CSV', err);
+      },
+    });
+  }
 }
