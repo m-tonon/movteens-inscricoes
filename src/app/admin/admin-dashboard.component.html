@@ -1,53 +1,17 @@
-<div class="admin-container">
-  <nb-card>
-    <nb-card-header>
-      <h1>Admin Dashboard</h1>
-    </nb-card-header>
-    <nb-card-body>
-      <p>Welcome to the admin dashboard!</p>
-      <p>Here you can manage users, view reports, and configure settings.</p>
-
-      <ng-container>
-        <div class="table-wrapper">
-          <h2>Registrations Data</h2>
-          <table class="table">
-            <thead>
-              <tr>
-                @for(col of displayedColumns; track col) {
-                <th>{{ col }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              @if (registrations$ | async; as registrations;) { @for (reg of
-              registrations; track reg) {
-              <tr>
-                <td>{{ reg.name }}</td>
-                <td>{{ reg.age }}</td>
-                <td>{{ reg.gender }}</td>
-                <td>{{ reg.responsibleName }}</td>
-                <td>{{ reg.responsiblePhone | phoneFormat }}</td>
-                <td>{{ reg.paymentConfirmed ? 'Sim' : 'Não' }}</td>
-                <td>{{ reg.createdAt | date : 'short' }}</td>
-              </tr>
-              } } @else {
-              <tr>
-                <td
-                  colspan="7"
-                  class="spinner"
-                >
-                  <ng-container *ngTemplateOutlet="loading"></ng-container>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </ng-container>
-    </nb-card-body>
-  </nb-card>
+<div class="admin-layout">
+  <app-sidenav></app-sidenav>
+  <div class="admin-container">
+    <nb-card>
+      <nb-card-header>
+        <h1>Admin Dashboard</h1>
+      </nb-card-header>
+      <nb-card-body>
+        <p>Welcome to the admin dashboard!</p>
+        <p>Here you can manage users, view reports, and configure settings.</p>
+        <ng-container>
+          <app-registrations-overview></app-registrations-overview>
+        </ng-container>
+      </nb-card-body>
+    </nb-card>
+  </div>
 </div>
-
-<ng-template #loading>
-  <mat-spinner size="50"></mat-spinner>
-</ng-template>
