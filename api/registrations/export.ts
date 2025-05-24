@@ -72,7 +72,7 @@ module.exports = async (req: any, res: any) => {
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader(
       'Content-Disposition',
-      'attachment; filename="inscricoes2025.csv"'
+      'attachment; filename="movteens-inscricoes2025.csv"'
     );
     res.status(200).send(csv);
   } catch (error) {
