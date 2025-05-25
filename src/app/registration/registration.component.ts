@@ -152,10 +152,6 @@ export class RegistrationComponent implements OnInit {
         relation: [''],
       }),
       parentalAuthorization: [false, Validators.requiredTrue],
-      payment: this.fb.group({
-        referenceId: [''],
-        paymentConfirmed: [false],
-      }),
     });
 
     this.registrationForm.get('birthDate')?.valueChanges.subscribe((value) => {
