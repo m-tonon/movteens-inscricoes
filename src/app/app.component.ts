@@ -9,7 +9,7 @@ import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
   template: `
     <nb-layout>
       <nb-layout-header fixed>
-        <h1>IPVO Acampa MovTeens</h1>
+        <h1>{{title}}</h1>
       </nb-layout-header>
       <nb-layout-column>
         <router-outlet></router-outlet>
@@ -19,5 +19,5 @@ import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'IPVO Acampa MovTeens';
+  title = 'IPVO Acampa Teens';
 }
