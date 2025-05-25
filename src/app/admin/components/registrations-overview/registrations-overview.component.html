@@ -1,6 +1,32 @@
-<div class="table-wrapper">
+<div class="table-wrapper card">
+  <h2>Inscrições</h2>
   <div class="table-header">
-    <h2>Inscrições</h2>
+    <div class="payment-toggle-group">
+      <button
+        nbButton
+        size="small"
+        [status]="paymentFilter === 'all' ? 'primary' : 'basic'"
+        (click)="setPaymentFilter('all')"
+      >
+        Todos
+      </button>
+      <button
+        nbButton
+        size="small"
+        [status]="paymentFilter === 'true' ? 'success' : 'basic'"
+        (click)="setPaymentFilter('true')"
+      >
+        Pagos
+      </button>
+      <button
+        nbButton
+        size="small"
+        [status]="paymentFilter === 'false' ? 'danger' : 'basic'"
+        (click)="setPaymentFilter('false')"
+      >
+        Pendentes
+      </button>
+    </div>
     <ng-container>
       <button
         nbButton
@@ -12,17 +38,37 @@
       </button>
     </ng-container>
   </div>
-  <table class="table">
-    <thead>
+  @if (registrations$ | async; as registrations;) {
+  <p-table
+    #table
+    dataKey="id"
+    sortField="name"
+    class="table"
+    [value]="filteredRegistrations"
+    [sortOrder]="1"
+  >
+    <ng-template #header>
       <tr>
-        @for(col of displayedColumns; track col) {
-        <th>{{ col }}</th>
-        }
+        <th
+          pSortableColumn="name"
+          style="width: 20%"
+        >
+          <p-sortIcon field="name" />
+          Nome
+        </th>
+        <th>Idade</th>
+        <th>Gênero</th>
+        <th>Nome do responsável</th>
+        <th>Telefone</th>
+        <th>Pagamento confirmado</th>
+        <th>Criado em</th>
+        <th style="width: 6rem"></th>
       </tr>
-    </thead>
-    <tbody>
-      @if (registrations$ | async; as registrations;) { @for (reg of
-      registrations; track reg) {
+    </ng-template>
+    <ng-template
+      #body
+      let-reg
+    >
       <tr>
         <td>{{ reg.name }}</td>
         <td>{{ reg.age }}</td>
@@ -31,19 +77,23 @@
         <td>{{ reg.responsiblePhone | phoneFormat }}</td>
         <td>{{ reg.paymentConfirmed ? 'Sim' : 'Não' }}</td>
         <td>{{ reg.createdAt | date : 'short' }}</td>
-      </tr>
-      } } @else {
-      <tr>
-        <td
-          colspan="7"
-          class="spinner"
-        >
-          <ng-container *ngTemplateOutlet="loading"></ng-container>
+        <td class="refresh-btn">
+          <p-toast />
+          <p-button
+            icon="pi pi-refresh"
+            (click)="updatePaymentStatus(reg)"
+            severity="secondary"
+            rounded
+          />
         </td>
       </tr>
-      }
-    </tbody>
-  </table>
+    </ng-template>
+  </p-table>
+  } @else {
+  <div class="loading-container">
+    <ng-container *ngTemplateOutlet="loading"></ng-container>
+  </div>
+  }
 </div>
 
 <ng-template #loading>
