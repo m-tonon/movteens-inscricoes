@@ -1,5 +1,6 @@
 <div class="table-wrapper card">
   <h2>Inscrições</h2>
+  @if (registrations$ | async; as registrations;) {
   <div class="table-header">
     <div class="payment-toggle-group">
       <button
@@ -38,7 +39,6 @@
       </button>
     </ng-container>
   </div>
-  @if (registrations$ | async; as registrations;) {
   <p-table
     #table
     dataKey="id"
