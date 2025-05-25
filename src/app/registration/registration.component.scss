@@ -23,7 +23,7 @@ nb-card-header {
 
   h1 {
     margin: 0;
-    color: #f5c30c;
+    color: #f1a33c;
     font-size: 1.5rem;
     font-weight: 600;
   }
@@ -34,12 +34,12 @@ nb-card-header {
     margin: 0;
     padding: 0.75rem;
     background: nb-theme(background-basic-color-1);
-    border-bottom: 1px solid #f5c30c;
+    border-bottom: 1px solid #f1a33c;
     overflow-x: auto;
     white-space: nowrap;
 
     .connector-past {
-      background-color: #f5c30c;
+      background-color: #f1a33c;
     }
 
     .step {
@@ -78,7 +78,7 @@ nb-card-header {
 }
 
 ::ng-deep nb-stepper .header .step.selected .label-index {
-  border-color: #f5c30c !important;
+  border-color: #f1a33c !important;
 
   span {
     color: #343440;
@@ -86,8 +86,8 @@ nb-card-header {
 }
 
 ::ng-deep nb-stepper .header .step.completed .label-index {
-  background-color: #f5c30c !important;
-  border-color: #f5c30c !important;
+  background-color: #f1a33c !important;
+  border-color: #f1a33c !important;
   color: #000 !important;
 }
 
@@ -119,7 +119,7 @@ nb-card-header {
 
       nb-icon {
         font-size: 1.25rem;
-        color: #f5c30c;
+        color: #f1a33c;
       }
 
       span {
@@ -147,7 +147,7 @@ nb-card-header {
     gap: 0.5rem;
 
     nb-icon {
-      color: #f5c30c;
+      color: #f1a33c;
       font-size: 1.25rem;
     }
   }
@@ -163,7 +163,7 @@ nb-card-header {
 // Extending base styles with specific colors
 .preletor {
   @extend .info-card;
-  border-left-color: #f5c30c;
+  border-left-color: #f1a33c;
 
   a {
     color: nb-theme(color-primary-500);
@@ -180,12 +180,12 @@ nb-card-header {
 
 .payment-info {
   @extend .info-card;
-  border-left-color: #f5c30c;
+  border-left-color: #f1a33c;
 }
 
 .contacts {
   @extend .info-card;
-  border-left-color: #f5c30c;
+  border-left-color: #f1a33c;
 
   .contact-item {
     display: flex;
@@ -198,7 +198,7 @@ nb-card-header {
     min-height: 44px;
 
     nb-icon {
-      color: #f5c30c;
+      color: #f1a33c;
       font-size: 1.25rem;
     }
   }
@@ -387,7 +387,7 @@ nb-card-header {
     border-radius: 0.75rem;
     padding: 1.25rem;
     margin: 1rem 0;
-    border-left: 4px solid #f5c30c;
+    border-left: 4px solid #f1a33c;
 
     h3 {
       font-size: 1.1rem;
@@ -398,7 +398,7 @@ nb-card-header {
     .payment-amount {
       font-size: 1.75rem;
       font-weight: 700;
-      color: #f5c30c;
+      color: #f1a33c;
       margin: 0.75rem 0;
     }
 
@@ -424,7 +424,7 @@ nb-card-header {
       border-radius: 0.75rem 0.75rem 0 0;
 
       h3 {
-        color: #f5c30c;
+        color: #f1a33c;
         margin: 0;
         font-size: 1.1rem;
         font-weight: 600;
