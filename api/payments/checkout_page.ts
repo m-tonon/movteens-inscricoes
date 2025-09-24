@@ -56,7 +56,7 @@ module.exports = async (req: any, res: any) => {
         customer_modifiable: true,
         items: [
           {
-            name: 'AcampaKids 2025',
+            name: '2º Acampa Teens',
             quantity: 1,
             unit_amount: 25000,
           }
