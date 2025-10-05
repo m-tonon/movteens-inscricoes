@@ -80,6 +80,7 @@ export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
   acknowledgmentForm!: FormGroup;
 
+  isEndedRegistration = signal(false);
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
@@ -106,7 +107,7 @@ export class RegistrationComponent implements OnInit {
     ],
     description:
       `
-        Está chegando o <b>2º Acampa Teens</b>, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.<br/><br/>
+        Está chegando o <b>2º Acampa Teens - Inteligência do Alto</b>, uma ótima oportunidade para que seu filho(a) possa fortalecer a fé e desenvolver autonomia e comunhão.<br/><br/>
         Garanta a sua vaga e lembre-se de convidar algum amigo !<br/><br/>
         ⚠️ <b>Importante:</b> Sua vaga só está garantida mediante pagamento.
       `,

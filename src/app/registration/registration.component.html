@@ -3,522 +3,528 @@
     <nb-card-header>
       <img
         alt=""
-        src="https://mcusercontent.com/1e3ede6565010c0201471308b/images/a8015d6c-02ed-4495-f1fc-fb843b115428.png"
+        src="../../assets/flyer.jpg"
         width="800"
         height="auto"
         style="display: block; max-width: 100%; height: auto;"
       />
     </nb-card-header>
     <nb-card-body style="padding: 1rem">
-      @if(isPaymentConfirmed()) {
-      <ng-container *ngTemplateOutlet="paymentCompleted"></ng-container>
+      @if(isEndedRegistration()) {
+        <ng-container *ngTemplateOutlet="endedRegistration"></ng-container>
       } @else {
-      <nb-stepper
-        orientation="horizontal"
-        #stepper
-      >
-        <!-- Step 1: Camp Information and Acknowledgment -->
-        <nb-step
-          [stepControl]="acknowledgmentForm"
-          label="Informações"
+        @if(isPaymentConfirmed()) {
+        <ng-container *ngTemplateOutlet="paymentCompleted"></ng-container>
+        } @else {
+        <nb-stepper
+          orientation="horizontal"
+          #stepper
         >
-          <div class="camp-info">
-            <p
-              class="description"
-              [innerHTML]="campInfo.description"
-            ></p>
-
-            <div class="info-grid">
-              <div class="info-item">
-                <nb-icon icon="calendar-outline"></nb-icon>
-                <span>Data: {{ campInfo.dates }}</span>
-              </div>
-              <div class="info-item">
-                <nb-icon icon="pin-outline"></nb-icon>
-                <span>Local: {{ campInfo.location }}</span>
-              </div>
-              <div class="info-item">
-                <nb-icon icon="people-outline"></nb-icon>
-                <span
-                  >Idade: {{ campInfo.minAge }} a
-                  {{ campInfo.maxAge }} anos</span
-                >
-              </div>
-            </div>
-
-            <div class="preletor">
-              <h3><nb-icon icon="mic-outline"></nb-icon> Preletor</h3>
-              <p>
-                <strong>{{ campInfo.preletor.name }}</strong>
-              </p>
-              <p [innerHTML]="campInfo.preletor.description"></p>
-            </div>
-
-            <div class="payment-info">
-              <h3>
-                <nb-icon icon="credit-card-outline"></nb-icon> Investimento
-              </h3>
-              <p>
-                <strong>R$ {{ campInfo.price.toFixed(2) }}</strong>
-              </p>
-              <p>
-                Formas de pagamento:
-                {{ campInfo.paymentOptions.methods.join(' ou ') }}
-              </p>
-              @if (campInfo.paymentOptions.maxInstallments > 1) {
-              <p class="installment-info">
-                Parcelamento em até
-                {{ campInfo.paymentOptions.maxInstallments }}x no cartão
-              </p>
-              }
-            </div>
-
-            <div class="contacts">
-              <h3><nb-icon icon="phone-outline"></nb-icon> Contatos</h3>
-              @for (contact of campInfo.contacts; track contact.phone) {
-              <div class="contact-item">
-                <nb-icon icon="person-outline"></nb-icon>
-                <p>
-                  <strong>{{ contact.name }}:</strong> {{ contact.phone }}
-                </p>
-              </div>
-              }
-            </div>
-
-            <form
-              [formGroup]="acknowledgmentForm"
-              class="acknowledgment-form"
-            >
-              <div class="checkbox-group">
-                <nb-checkbox formControlName="hasReadInfo">
-                  Li e compreendi todas as informações do acampamento
-                </nb-checkbox>
-                <nb-checkbox formControlName="termsAccepted">
-                  Aceito os termos e condições do acampamento
-                </nb-checkbox>
-              </div>
-            </form>
-
-            <div class="button-row">
-              <button
-                class="next-button"
-                nbButton
-                status="primary"
-                nbStepperNext
-                (click)="goToNextStep()"
-                [disabled]="!canProceedToRegistration()"
-              >
-                Próximo Passo
-              </button>
-            </div>
-          </div>
-        </nb-step>
-
-        <!-- Step 2: Registration Form -->
-        <nb-step
-          [stepControl]="registrationForm"
-          label="Inscrição"
-        >
-          <form
-            [formGroup]="registrationForm"
-            class="registration-form"
+          <!-- Step 1: Camp Information and Acknowledgment -->
+          <nb-step
+            [stepControl]="acknowledgmentForm"
+            label="Informações"
           >
-            <div class="form-row">
-              <nb-form-field>
-                <label>Nome do Adolescente *</label>
-                <input
-                  nbInput
-                  fullWidth
-                  formControlName="name"
-                  placeholder="Nome completo"
-                  [status]="getFieldStatus('name')"
-                />
-                @if (getFieldStatus('name') === 'danger') {
-                <span class="error-message"> O nome é obrigatório. </span>
-                }
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Data de Nascimento *</label>
-                <input
-                  nbInput
-                  fullWidth
-                  formControlName="birthDate"
-                  [nbDatepicker]="birthDatePicker"
-                  [status]="getFieldStatus('birthDate')"
-                />
-                <nb-datepicker #birthDatePicker></nb-datepicker>
-                @if (getFieldStatus('birthDate') === 'danger') {
-                <span class="error-message">
-                  A data de nascimento é obrigatória.
-                </span>
-                }
-              </nb-form-field>
-
-              <nb-form-field>
-                <label>Idade *</label>
-                <input
-                  nbInput
-                  type="number"
-                  fullWidth
-                  [value]="calculatedAge()"
-                  readonly
-                  disabled
-                />
-                @let age = calculatedAge(); @if (age != null && (age < 11 || age
-                > 16)) {
-                <span class="error-message">
-                  O adolescente deve ter entre 12 e 16 anos de idade.
-                </span>
-                }
-              </nb-form-field>
-
-              <nb-form-field>
-                <label>Gênero *</label>
-                <nb-select
-                  fullWidth
-                  formControlName="gender"
-                  [status]="getFieldStatus('gender')"
-                >
-                  <nb-option value="Masculino">Masculino</nb-option>
-                  <nb-option value="Feminino">Feminino</nb-option>
-                </nb-select>
-                @if (getFieldStatus('gender') === 'danger') {
-                <span class="error-message"> O gênero é obrigatório. </span>
-                }
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Documento de identidade da adolescente *</label>
-                <input
-                  nbInput
-                  fullWidth
-                  type="number"
-                  formControlName="identityDocument"
-                  placeholder="RG ou Certidão de Nascimento"
-                  [status]="getFieldStatus('identityDocument')"
-                />
-                @if (getFieldStatus('identityDocument') === 'danger') {
-                <span class="error-message">
-                  O documento de identidade é obrigatório.
-                </span>
-                }
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Endereço</label>
-                <textarea
-                  nbInput
-                  fullWidth
-                  formControlName="address"
-                  placeholder="Endereço completo"
-                ></textarea>
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>É membro de alguma igreja?</label>
-                <nb-select
-                  fullWidth
-                  formControlName="churchMembership"
-                >
-                  <nb-option value="sim">Sim</nb-option>
-                  <nb-option value="nao">Não</nb-option>
-                </nb-select>
-              </nb-form-field>
-
-              <nb-form-field>
-                <label>Qual igreja?</label>
-                <input
-                  nbInput
-                  fullWidth
-                  formControlName="churchName"
-                  placeholder="Nome da igreja"
-                />
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Plano de Saúde</label>
-                <input
-                  nbInput
-                  fullWidth
-                  formControlName="healthInsurance"
-                  placeholder="Nome do plano de saúde (se possuir)"
-                />
-                <p class="health-insurance-note">
-                  <strong>Observação:</strong> Não possuindo plano de saúde e
-                  não sendo possível contatar o responsável, será levado no
-                  posto de saúde mais próximo
+            <div class="camp-info">
+              <p
+                class="description"
+                [innerHTML]="campInfo.description"
+              ></p>
+  
+              <div class="info-grid">
+                <div class="info-item">
+                  <nb-icon icon="calendar-outline"></nb-icon>
+                  <span>Data: {{ campInfo.dates }}</span>
+                </div>
+                <div class="info-item">
+                  <nb-icon icon="pin-outline"></nb-icon>
+                  <span>Local: {{ campInfo.location }}</span>
+                </div>
+                <div class="info-item">
+                  <nb-icon icon="people-outline"></nb-icon>
+                  <span
+                    >Idade: {{ campInfo.minAge }} a
+                    {{ campInfo.maxAge }} anos</span
+                  >
+                </div>
+              </div>
+  
+              <div class="preletor">
+                <h3><nb-icon icon="mic-outline"></nb-icon> Preletor</h3>
+                <p>
+                  <strong>{{ campInfo.preletor.name }}</strong>
                 </p>
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Medicamentos</label>
-                <textarea
-                  nbInput
-                  fullWidth
-                  formControlName="medications"
-                  placeholder="Liste os medicamentos que a adolescente toma regularmente (se houver)"
-                ></textarea>
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Alergias</label>
-                <textarea
-                  nbInput
-                  fullWidth
-                  formControlName="allergies"
-                  placeholder="Liste todas as alergias (alimentos, medicamentos, etc)"
-                ></textarea>
-              </nb-form-field>
-            </div>
-
-            <div class="form-row">
-              <nb-form-field>
-                <label>Necessidades Especiais</label>
-                <textarea
-                  nbInput
-                  fullWidth
-                  formControlName="specialNeeds"
-                  placeholder="Descreva qualquer necessidade especial que a adolescente tenha"
-                ></textarea>
-              </nb-form-field>
-            </div>
-
-            <div
-              formGroupName="responsibleInfo"
-              class="responsible-info"
-            >
-              <h4>Informações do Responsável</h4>
-              <div class="form-row">
-                <nb-form-field>
-                  <label>Nome *</label>
-                  <input
-                    nbInput
-                    fullWidth
-                    formControlName="name"
-                    placeholder="Nome do contato"
-                    [status]="getFieldStatus('responsibleInfo.name')"
-                  />
-                  @if (getFieldStatus('responsibleInfo.name') === 'danger') {
-                  <span class="error-message">
-                    O nome do responsável é obrigatório.
-                  </span>
-                  }
-                </nb-form-field>
-
-                <nb-form-field>
-                  <label>Documento de identidade *</label>
-                  <input
-                    nbInput
-                    fullWidth
-                    formControlName="document"
-                    mask="000.000.000-00"
-                    placeholder="CPF"
-                    [status]="getFieldStatus('responsibleInfo.document')"
-                  />
-                  @if (getFieldStatus('responsibleInfo.document') === 'danger')
-                  {
-                  <span class="error-message">
-                    O documento do responsável é obrigatório.
-                  </span>
-                  } @if (getFieldStatus('responsibleInfo.document') ===
-                  'warning') {
-                  <span class="error-message">
-                    O CPF deve conter 11 caracteres. Por favor, corrija.
-                  </span>
-                  }
-                </nb-form-field>
-
-                <nb-form-field>
-                  <label>Telefone *</label>
-                  <input
-                    nbInput
-                    fullWidth
-                    formControlName="phone"
-                    mask="(00) 00000-0000"
-                    placeholder="(00) 00000-0000"
-                    [status]="getFieldStatus('responsibleInfo.phone')"
-                  />
-                  @if (getFieldStatus('responsibleInfo.phone') === 'danger') {
-                  <span class="error-message">
-                    O telefone do responsável é obrigatório.
-                  </span>
-                  } @if (getFieldStatus('responsibleInfo.phone') === 'warning')
-                  {
-                  <span class="error-message">
-                    O telefone deve conter 11 dígitos. Por favor, corrija.
-                  </span>
-                  }
-                </nb-form-field>
-
-                <nb-form-field>
-                  <label>Email *</label>
-                  <input
-                    nbInput
-                    fullWidth
-                    formControlName="email"
-                    placeholder="@"
-                    [status]="getFieldStatus('responsibleInfo.email')"
-                  />
-                  @if (getFieldStatus('responsibleInfo.email') === 'danger') {
-                  <span class="error-message">
-                    O email do responsável é necessário para processar o
-                    pagamento.
-                  </span>
-                  } @if (getFieldStatus('responsibleInfo.email') === 'warning')
-                  {
-                  <span class="error-message">
-                    O formato do email está incorreto. Por favor, insira um
-                    email válido.
-                  </span>
-                  }
-                </nb-form-field>
-
-                <nb-form-field>
-                  <label>Relação</label>
-                  <input
-                    nbInput
-                    fullWidth
-                    formControlName="relation"
-                    placeholder="Ex: Avó, Tio"
-                  />
-                </nb-form-field>
+                <p [innerHTML]="campInfo.preletor.description"></p>
               </div>
-            </div>
-
-            <div class="parental-authorization">
-              <nb-checkbox
-                formControlName="parentalAuthorization"
-                [status]="getFieldStatus('parentalAuthorization')"
-              >
-                Autorizo o menor citado acima a participar do evento 2º ACAMPA
-                TEENS no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu - PR,
-                87160-000, no período de 31 de outubro a 02 de novembro. Esta
-                autorização está de acordo com o ECA (lei 8.069/90).
-              </nb-checkbox>
-              @if (getFieldStatus('parentalAuthorization') === 'danger') {
-              <span class="error-message">
-                A autorização dos pais é obrigatória.
-              </span>
-              }
-            </div>
-          </form>
-
-          <div class="button-row">
-            <button
-              nbButton
-              status="basic"
-              nbStepperPrevious
-            >
-              Voltar
-            </button>
-            <button
-              class="next-button"
-              nbButton
-              status="primary"
-              nbStepperNext
-              (click)="onSubmit()"
-              [disabled]="!canProceedToPayment()"
-            >
-              Próximo Passo
-            </button>
-          </div>
-        </nb-step>
-
-        <!-- Step 3: Payment Information -->
-        <nb-step
-          [stepControl]="registrationForm"
-          label="Pagamento"
-        >
-          <div class="payment-step">
-            <div class="payment-info-box">
-              <h3>Valor do Investimento</h3>
-              <div class="payment-amount">
-                R$ {{ campInfo.price.toFixed(2) }}
-              </div>
-              <div class="payment-details">
+  
+              <div class="payment-info">
+                <h3>
+                  <nb-icon icon="credit-card-outline"></nb-icon> Investimento
+                </h3>
+                <p>
+                  <strong>R$ {{ campInfo.price.toFixed(2) }}</strong>
+                </p>
                 <p>
                   Formas de pagamento:
                   {{ campInfo.paymentOptions.methods.join(' ou ') }}
                 </p>
                 @if (campInfo.paymentOptions.maxInstallments > 1) {
-                <p>
+                <p class="installment-info">
                   Parcelamento em até
                   {{ campInfo.paymentOptions.maxInstallments }}x no cartão
                 </p>
                 }
               </div>
+  
+              <div class="contacts">
+                <h3><nb-icon icon="phone-outline"></nb-icon> Contatos</h3>
+                @for (contact of campInfo.contacts; track contact.phone) {
+                <div class="contact-item">
+                  <nb-icon icon="person-outline"></nb-icon>
+                  <p>
+                    <strong>{{ contact.name }}:</strong> {{ contact.phone }}
+                  </p>
+                </div>
+                }
+              </div>
+  
+              <form
+                [formGroup]="acknowledgmentForm"
+                class="acknowledgment-form"
+              >
+                <div class="checkbox-group">
+                  <nb-checkbox formControlName="hasReadInfo">
+                    Li e compreendi todas as informações do acampamento
+                  </nb-checkbox>
+                  <nb-checkbox formControlName="termsAccepted">
+                    Aceito os termos e condições do acampamento
+                  </nb-checkbox>
+                </div>
+              </form>
+  
+              <div class="button-row">
+                <button
+                  class="next-button"
+                  nbButton
+                  status="primary"
+                  nbStepperNext
+                  (click)="goToNextStep()"
+                  [disabled]="!canProceedToRegistration()"
+                >
+                  Próximo Passo
+                </button>
+              </div>
             </div>
-
-            @if(isLoading()) {
-            <ng-container *ngTemplateOutlet="spinner"></ng-container>
-            } @else {
-            <nb-card>
-              <nb-card-header>
-                <h3>Pagamento via PagSeguro</h3>
-              </nb-card-header>
-              <nb-card-body>
-                <p>
-                  Você será redirecionado para a página de pagamento do
-                  PagSeguro em uma nova janela.
-                </p>
-                <p>
-                  Após concluir o pagamento, você pode fechar a janela do
-                  PagSeguro e retornar para esta página.
-                </p>
-                <div class="button-container">
-                  <button
-                    class="next-button"
-                    nbButton
-                    status="primary"
-                    (click)="openPaymentPage()"
-                    [disabled]="!isRegistrationComplete()"
+          </nb-step>
+  
+          <!-- Step 2: Registration Form -->
+          <nb-step
+            [stepControl]="registrationForm"
+            label="Inscrição"
+          >
+            <form
+              [formGroup]="registrationForm"
+              class="registration-form"
+            >
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Nome do Adolescente *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="name"
+                    placeholder="Nome completo"
+                    [status]="getFieldStatus('name')"
+                  />
+                  @if (getFieldStatus('name') === 'danger') {
+                  <span class="error-message"> O nome é obrigatório. </span>
+                  }
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Data de Nascimento *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="birthDate"
+                    [nbDatepicker]="birthDatePicker"
+                    [status]="getFieldStatus('birthDate')"
+                  />
+                  <nb-datepicker #birthDatePicker></nb-datepicker>
+                  @if (getFieldStatus('birthDate') === 'danger') {
+                  <span class="error-message">
+                    A data de nascimento é obrigatória.
+                  </span>
+                  }
+                </nb-form-field>
+  
+                <nb-form-field>
+                  <label>Idade *</label>
+                  <input
+                    nbInput
+                    type="number"
+                    fullWidth
+                    [value]="calculatedAge()"
+                    readonly
+                    disabled
+                  />
+                  @let age = calculatedAge(); @if (age != null && (age < 11 || age
+                  > 16)) {
+                  <span class="error-message">
+                    O adolescente deve ter entre 12 e 16 anos de idade.
+                  </span>
+                  }
+                </nb-form-field>
+  
+                <nb-form-field>
+                  <label>Gênero *</label>
+                  <nb-select
+                    fullWidth
+                    formControlName="gender"
+                    [status]="getFieldStatus('gender')"
                   >
-                    <nb-icon icon="credit-card-outline"></nb-icon>
-                    Ir para pagamento
-                  </button>
-                </div>
-                <div class="button-container">
-                  <button
-                    nbButton
-                    status="basic"
-                    nbStepperPrevious
+                    <nb-option value="Masculino">Masculino</nb-option>
+                    <nb-option value="Feminino">Feminino</nb-option>
+                  </nb-select>
+                  @if (getFieldStatus('gender') === 'danger') {
+                  <span class="error-message"> O gênero é obrigatório. </span>
+                  }
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Documento de identidade da adolescente *</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    type="number"
+                    formControlName="identityDocument"
+                    placeholder="RG ou Certidão de Nascimento"
+                    [status]="getFieldStatus('identityDocument')"
+                  />
+                  @if (getFieldStatus('identityDocument') === 'danger') {
+                  <span class="error-message">
+                    O documento de identidade é obrigatório.
+                  </span>
+                  }
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Endereço</label>
+                  <textarea
+                    nbInput
+                    fullWidth
+                    formControlName="address"
+                    placeholder="Endereço completo"
+                  ></textarea>
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>É membro de alguma igreja?</label>
+                  <nb-select
+                    fullWidth
+                    formControlName="churchMembership"
                   >
-                    Voltar
-                  </button>
+                    <nb-option value="sim">Sim</nb-option>
+                    <nb-option value="nao">Não</nb-option>
+                  </nb-select>
+                </nb-form-field>
+  
+                <nb-form-field>
+                  <label>Qual igreja?</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="churchName"
+                    placeholder="Nome da igreja"
+                  />
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Plano de Saúde</label>
+                  <input
+                    nbInput
+                    fullWidth
+                    formControlName="healthInsurance"
+                    placeholder="Nome do plano de saúde (se possuir)"
+                  />
+                  <p class="health-insurance-note">
+                    <strong>Observação:</strong> Não possuindo plano de saúde e
+                    não sendo possível contatar o responsável, será levado no
+                    posto de saúde mais próximo
+                  </p>
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Medicamentos</label>
+                  <textarea
+                    nbInput
+                    fullWidth
+                    formControlName="medications"
+                    placeholder="Liste os medicamentos que a adolescente toma regularmente (se houver)"
+                  ></textarea>
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Alergias</label>
+                  <textarea
+                    nbInput
+                    fullWidth
+                    formControlName="allergies"
+                    placeholder="Liste todas as alergias (alimentos, medicamentos, etc)"
+                  ></textarea>
+                </nb-form-field>
+              </div>
+  
+              <div class="form-row">
+                <nb-form-field>
+                  <label>Necessidades Especiais</label>
+                  <textarea
+                    nbInput
+                    fullWidth
+                    formControlName="specialNeeds"
+                    placeholder="Descreva qualquer necessidade especial que a adolescente tenha"
+                  ></textarea>
+                </nb-form-field>
+              </div>
+  
+              <div
+                formGroupName="responsibleInfo"
+                class="responsible-info"
+              >
+                <h4>Informações do Responsável</h4>
+                <div class="form-row">
+                  <nb-form-field>
+                    <label>Nome *</label>
+                    <input
+                      nbInput
+                      fullWidth
+                      formControlName="name"
+                      placeholder="Nome do contato"
+                      [status]="getFieldStatus('responsibleInfo.name')"
+                    />
+                    @if (getFieldStatus('responsibleInfo.name') === 'danger') {
+                    <span class="error-message">
+                      O nome do responsável é obrigatório.
+                    </span>
+                    }
+                  </nb-form-field>
+  
+                  <nb-form-field>
+                    <label>Documento de identidade *</label>
+                    <input
+                      nbInput
+                      fullWidth
+                      formControlName="document"
+                      mask="000.000.000-00"
+                      placeholder="CPF"
+                      [status]="getFieldStatus('responsibleInfo.document')"
+                    />
+                    @if (getFieldStatus('responsibleInfo.document') === 'danger')
+                    {
+                    <span class="error-message">
+                      O documento do responsável é obrigatório.
+                    </span>
+                    } @if (getFieldStatus('responsibleInfo.document') ===
+                    'warning') {
+                    <span class="error-message">
+                      O CPF deve conter 11 caracteres. Por favor, corrija.
+                    </span>
+                    }
+                  </nb-form-field>
+  
+                  <nb-form-field>
+                    <label>Telefone *</label>
+                    <input
+                      nbInput
+                      fullWidth
+                      formControlName="phone"
+                      mask="(00) 00000-0000"
+                      placeholder="(00) 00000-0000"
+                      [status]="getFieldStatus('responsibleInfo.phone')"
+                    />
+                    @if (getFieldStatus('responsibleInfo.phone') === 'danger') {
+                    <span class="error-message">
+                      O telefone do responsável é obrigatório.
+                    </span>
+                    } @if (getFieldStatus('responsibleInfo.phone') === 'warning')
+                    {
+                    <span class="error-message">
+                      O telefone deve conter 11 dígitos. Por favor, corrija.
+                    </span>
+                    }
+                  </nb-form-field>
+  
+                  <nb-form-field>
+                    <label>Email *</label>
+                    <input
+                      nbInput
+                      fullWidth
+                      formControlName="email"
+                      placeholder="@"
+                      [status]="getFieldStatus('responsibleInfo.email')"
+                    />
+                    @if (getFieldStatus('responsibleInfo.email') === 'danger') {
+                    <span class="error-message">
+                      O email do responsável é necessário para processar o
+                      pagamento.
+                    </span>
+                    } @if (getFieldStatus('responsibleInfo.email') === 'warning')
+                    {
+                    <span class="error-message">
+                      O formato do email está incorreto. Por favor, insira um
+                      email válido.
+                    </span>
+                    }
+                  </nb-form-field>
+  
+                  <nb-form-field>
+                    <label>Relação</label>
+                    <input
+                      nbInput
+                      fullWidth
+                      formControlName="relation"
+                      placeholder="Ex: Avó, Tio"
+                    />
+                  </nb-form-field>
                 </div>
-              </nb-card-body>
-            </nb-card>
-            }
-          </div>
-        </nb-step>
-      </nb-stepper>
+              </div>
+  
+              <div class="parental-authorization">
+                <nb-checkbox
+                  formControlName="parentalAuthorization"
+                  [status]="getFieldStatus('parentalAuthorization')"
+                >
+                  Autorizo o menor citado acima a participar do evento 2º ACAMPA
+                  TEENS no Maanaim 1240, Estr. Arns, 1516, Mandaguaçu - PR,
+                  87160-000, no período de 31 de outubro a 02 de novembro. Esta
+                  autorização está de acordo com o ECA (lei 8.069/90).
+                </nb-checkbox>
+                @if (getFieldStatus('parentalAuthorization') === 'danger') {
+                <span class="error-message">
+                  A autorização dos pais é obrigatória.
+                </span>
+                }
+              </div>
+            </form>
+  
+            <div class="button-row">
+              <button
+                nbButton
+                status="basic"
+                nbStepperPrevious
+              >
+                Voltar
+              </button>
+              <button
+                class="next-button"
+                nbButton
+                status="primary"
+                nbStepperNext
+                (click)="onSubmit()"
+                [disabled]="!canProceedToPayment()"
+              >
+                Próximo Passo
+              </button>
+            </div>
+          </nb-step>
+  
+          <!-- Step 3: Payment Information -->
+          <nb-step
+            [stepControl]="registrationForm"
+            label="Pagamento"
+          >
+            <div class="payment-step">
+              <div class="payment-info-box">
+                <h3>Valor do Investimento</h3>
+                <div class="payment-amount">
+                  R$ {{ campInfo.price.toFixed(2) }}
+                </div>
+                <div class="payment-details">
+                  <p>
+                    Formas de pagamento:
+                    {{ campInfo.paymentOptions.methods.join(' ou ') }}
+                  </p>
+                  @if (campInfo.paymentOptions.maxInstallments > 1) {
+                  <p>
+                    Parcelamento em até
+                    {{ campInfo.paymentOptions.maxInstallments }}x no cartão
+                  </p>
+                  }
+                </div>
+              </div>
+  
+              @if(isLoading()) {
+              <ng-container *ngTemplateOutlet="spinner"></ng-container>
+              } @else {
+              <nb-card>
+                <nb-card-header>
+                  <h3>Pagamento via PagSeguro</h3>
+                </nb-card-header>
+                <nb-card-body>
+                  <p>
+                    Você será redirecionado para a página de pagamento do
+                    PagSeguro em uma nova janela.
+                  </p>
+                  <p>
+                    Após concluir o pagamento, você pode fechar a janela do
+                    PagSeguro e retornar para esta página.
+                  </p>
+                  <div class="button-container">
+                    <button
+                      class="next-button"
+                      nbButton
+                      status="primary"
+                      (click)="openPaymentPage()"
+                      [disabled]="!isRegistrationComplete()"
+                    >
+                      <nb-icon icon="credit-card-outline"></nb-icon>
+                      Ir para pagamento
+                    </button>
+                  </div>
+                  <div class="button-container">
+                    <button
+                      nbButton
+                      status="basic"
+                      nbStepperPrevious
+                    >
+                      Voltar
+                    </button>
+                  </div>
+                </nb-card-body>
+              </nb-card>
+              }
+            </div>
+          </nb-step>
+        </nb-stepper>
+        }
       }
     </nb-card-body>
   </nb-card>
 </div>
 
 <ng-template #paymentCompleted>
-  <div class="confirmation-message">
-    <nb-icon
-      icon="checkmark-circle-2-outline"
-      status="success"
-    ></nb-icon>
-    <h2>Inscrição realizada com sucesso!</h2>
+  <div class="message-box">
+    <div class="completed-title">
+      <nb-icon
+        icon="checkmark-circle-2-outline"
+        status="success"
+      ></nb-icon>
+      <h2>Inscrição realizada com sucesso!</h2>
+    </div>
     <p>Seu pagamento ainda está em processo de confirmação.<br /></p>
     <p>
       Enviaremos um email para confirmar a sua inscrição assim que o pagamento
@@ -534,6 +540,41 @@
     </p>
     }
   </div>
+</ng-template>
+
+
+
+<ng-template #endedRegistration>
+  <div class="message-box">
+    <div class="ended-title">
+      <nb-icon icon="alert-circle-outline" status="danger"></nb-icon>
+      <h2>Inscrições Encerradas</h2><br />
+    </div>
+    <p>
+      <strong>Infelizmente as inscrições para o acampamento já foram encerradas.</strong><br />
+    </p>
+    <p>
+      Agradecemos muito pelo seu interesse! 💙
+    </p>
+    <br />
+    <p>
+      Caso queira participar de próximas edições, acompanhe nossos canais de
+      comunicação para não perder nossas atividades.
+    </p>
+    <br />
+    <p>Em caso de dúvidas, entre em contato com nossa equipe:</p>
+    @for (contact of campInfo.contacts; track contact.phone) {
+    <p>
+      <strong>{{ contact.name }}:</strong> {{ contact.phone }}
+    </p>
+    }
+  </div>
+</ng-template>
+
+<ng-template #spinner>
+  <nb-card [nbSpinner]="isLoading()" class="spinner" nbSpinnerStatus="info">
+    <nb-card-body></nb-card-body>
+  </nb-card>
 </ng-template>
 
 <ng-template #spinner>

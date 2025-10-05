@@ -93,35 +93,8 @@
   color: #999;
 }
 
-// .table p-iconfield.ml-auto {
-//   display: flex;
-//   align-items: center;
-//   justify-content: flex-end;
-//   margin-left: auto;
-//   margin-right: 0;
-//   padding: 1rem 1.5rem 0.5rem 1.5rem;
-// }
-
-// .table input[pInputText] {
-//   border-radius: 24px;
-//   border: 1px solid #e0e0e0;
-//   padding: 0.5rem 2.5rem 0.5rem 1rem;
-//   font-size: 1rem;
-//   background: #f8fafd;
-//   transition: box-shadow 0.2s, border-color 0.2s;
-//   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-//   outline: none;
-// }
-
-// .table input[pInputText]:focus {
-//   border-color: #1976d2;
-//   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
-// }
-
-// .table .pi-search {
-//   color: #1976d2;
-//   font-size: 1.2rem;
-//   right: 1rem;
-//   top: 50%;
-//   transform: translateY(-50%);
-// }
+.gender-column {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
