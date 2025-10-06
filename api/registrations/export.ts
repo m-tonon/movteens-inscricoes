@@ -9,7 +9,12 @@ module.exports = async (req: any, res: any) => {
   await connectToDatabase();
 
   try {
-    const registrations = await RegistrationModel.find({}).lean();
+    let registrations = await RegistrationModel.find({}).lean();
+
+    const payment = req.query?.payment;
+    if (payment === 'true') {
+      registrations = registrations.filter(r => r.payment?.paymentConfirmed === true);
+    }
 
     const flatRegistrations = registrations.map((r: any) => ({
       name: r.name,
