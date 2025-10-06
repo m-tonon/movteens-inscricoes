@@ -1415,7 +1415,7 @@ export const confirmationTemplate = `
                                                               <img style="
                                                                   max-width: 100%;
                                                                   height: 50px;
-                                                                " width="60" height="30" class="site-img-logo" src="https://i.ibb.co/67pgzLn9/movteens-logo.png" alt="Movteens">
+                                                                " width="60" height="30" class="site-img-logo" src="https://github.com/m-tonon/movteens-inscricoes/blob/master/src/assets/movteens-logo.png" alt="Movteens">
                                                             </a><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="
                                                           background-color: transparent;
                                                           width: 100%;
