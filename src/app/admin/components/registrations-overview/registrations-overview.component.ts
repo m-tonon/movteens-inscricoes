@@ -4,6 +4,8 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
+  TemplateRef,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -12,9 +14,12 @@ import { NbDateFnsDateModule } from '@nebular/date-fns';
 import {
   NbButtonModule,
   NbCardModule,
+  NbDialogRef,
+  NbDialogService,
   NbFormFieldModule,
   NbIconModule,
   NbInputModule,
+  NbRadioModule,
   NbSpinnerModule,
 } from '@nebular/theme';
 import { PhoneFormatPipe } from '../../../pipes/phone-format.pipe';
@@ -53,7 +58,8 @@ import { TagModule } from 'primeng/tag';
     ToastModule,
     StyleClassModule,
     SelectModule,
-    TagModule
+    TagModule,
+    NbRadioModule
   ],
   providers: [MessageService],
   templateUrl: './registrations-overview.component.html',
@@ -63,6 +69,10 @@ import { TagModule } from 'primeng/tag';
 export class RegistrationsOverviewComponent implements OnInit {
   private registrationService = inject(RegistrationService);
   private messageService = inject(MessageService);
+  private dialogService = inject(NbDialogService);
+
+  isExporting = signal(false);
+  exportDialogRef = signal<NbDialogRef<any> | null>(null);
   registrations$?: Observable<ExportedRegistration[]>;
 
   allRegistrations: ExportedRegistration[] = [];
@@ -71,6 +81,11 @@ export class RegistrationsOverviewComponent implements OnInit {
   genders: any[] = [
     { label: 'Masculino', value: 'Masculino' },
     { label: 'Feminino', value: 'Feminino' }
+  ];
+  exportPaymentFilter: 'all' | 'true' = 'all';
+  exportPaymentOptions = [
+    { label: 'Todos', value: 'all' },
+    { label: 'Somente pagos', value: 'true' },
   ];
 
   ngOnInit(): void {
@@ -100,17 +115,27 @@ export class RegistrationsOverviewComponent implements OnInit {
     this.applyPaymentFilter();
   }
 
-  exportToCSV(): void {
-    this.registrationService.exportRegistrations().subscribe({
+  openExportDialog(tpl: TemplateRef<any>) {
+    this.exportPaymentFilter = this.paymentFilter === 'true' ? 'true' : 'all';
+    const ref = this.dialogService.open(tpl, { context: { title: 'Exportar CSV' } });
+    this.exportDialogRef.set(ref);
+  }
+
+  confirmExport(): void {
+    this.isExporting.set(true);
+    this.registrationService.exportRegistrations(this.exportPaymentFilter).subscribe({
       next: (blob: Blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'inscricoes2025.csv';
+        a.download = 'inscricoes-movteens-2025.csv';
         a.click();
         window.URL.revokeObjectURL(url);
+        this.isExporting.set(false);
+        this.exportDialogRef()?.close();
       },
       error: (err) => {
+        this.isExporting.set(false);
         console.error('Failed to export CSV', err);
       },
     });

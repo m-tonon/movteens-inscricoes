@@ -33,7 +33,7 @@
         nbButton
         status="success"
         size="small"
-        (click)="exportToCSV()"
+        (click)="openExportDialog(exportDialog)"
       >
         Exportar CSV
       </button>
@@ -58,6 +58,7 @@
           Nome
         </th>
         <th>Idade</th>
+        <th>Igreja</th>
         <th class="gender-column">
           <ng-container>
             Gênero
@@ -100,6 +101,7 @@
         <td>{{ rowIndex + 1 }}</td>
         <td>{{ reg.name }}</td>
         <td>{{ reg.age }}</td>
+        <td>{{ reg.churchName }}</td>
         <td>{{ reg.gender }}</td>
         <td>{{ reg.responsibleName }}</td>
         <td>{{ reg.responsiblePhone | phoneFormat }}</td>
@@ -126,4 +128,62 @@
 
 <ng-template #loading>
   <mat-spinner size="50"></mat-spinner>
+</ng-template>
+
+<ng-template #exportDialog let-ref="dialogRef">
+  <nb-card class="export-dialog">
+    <nb-card-header>
+      <nb-icon icon="download-outline"></nb-icon>
+      <span> Exportar CSV </span>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="mt-2">
+        Deseja exportar as inscrições atuais como CSV?
+      </div>
+    </nb-card-body>
+    <nb-card-footer class="export-actions">
+      @if (isExporting()) {
+        <div class="export-progress">
+          <span>Gerando...</span>
+        </div>
+      } @else {
+        <div class="footer-container">
+          <div class="export-filter">
+            <p-select
+              [ngModel]="exportPaymentFilter"
+              (ngModelChange)="exportPaymentFilter = $event"
+              [options]="exportPaymentOptions"
+              placeholder="Filtrar por pagamento"
+              [showClear]="false"
+              [disabled]="isExporting()"
+            >
+              <ng-template #item let-option>
+                <span>{{ option.label }}</span>
+              </ng-template>
+            </p-select>
+          </div>
+          <div class="export-actions">
+            <button
+              nbButton
+              size="small"
+              status="basic"
+              (click)="ref.close()"
+              [disabled]="isExporting()"
+            >
+              Cancelar
+            </button>
+            <button
+              nbButton
+              size="small"
+              status="success"
+              (click)="confirmExport()"
+              [disabled]="isExporting()"
+            >
+              Exportar
+            </button>
+          </div>
+        </div>
+      }
+    </nb-card-footer>
+  </nb-card>
 </ng-template>

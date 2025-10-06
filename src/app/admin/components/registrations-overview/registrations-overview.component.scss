@@ -98,3 +98,53 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.export-dialog {
+  width: 500px;
+  max-width: 90vw;
+}
+
+.export-dialog nb-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.export-dialog nb-card-body {
+  font-size: 0.95rem;
+  color: #3a3a3a;
+}
+
+.export-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.export-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+}
+
+.footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.export-filter {
+  margin: 0;
+  margin-right: auto;
+  padding: 0;
+}
+
+nb-card-footer .export-actions {
+  display: flex;
+  gap: 0.5rem;
+}
