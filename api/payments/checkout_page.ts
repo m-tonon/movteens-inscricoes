@@ -32,6 +32,8 @@ module.exports = async (req: any, res: any) => {
 
     const expirationDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().replace('Z', '-03:00');
 
+    const amount = payment.amount ? payment.amount * 100 : 25000;
+
     const options = {
       method: 'POST',
       url: `${PAGBANK_API_URL}/checkouts`,
@@ -58,7 +60,7 @@ module.exports = async (req: any, res: any) => {
           {
             name: '2º Acampa Teens',
             quantity: 1,
-            unit_amount: 25000,
+            unit_amount: amount,
           }
         ],
         payment_methods: [

@@ -42,6 +42,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { switchMap } from 'rxjs';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { DISCOUNT_DOCUMENTS } from '../../../shared/discounts-documents';
 
 @Component({
   selector: 'app-registration',
@@ -80,6 +81,7 @@ export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
   acknowledgmentForm!: FormGroup;
 
+  registrationAmount = signal<number>(250.0);
   isEndedRegistration = signal(false);
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
@@ -87,12 +89,13 @@ export class RegistrationComponent implements OnInit {
   calculatedAge = signal<number | null>(null);
   checkoutUrl: string = '';
   referenceId: string = this.generateReferenceId();
+  discountDocument: string = '';
 
   campInfo = {
     name: '2º ACAMPA TEENS',
     dates: '31 de outubro, 01 e 02 de novembro',
     location: 'Acampamento Evangélico Maanaim',
-    price: 250.0,
+    price: this.registrationAmount(),
     minAge: 12,
     maxAge: 16,
     preletor: {
@@ -202,8 +205,15 @@ export class RegistrationComponent implements OnInit {
         cpf: formData.responsibleInfo.document.replace(/\D/g, ''),
         phone: formData.responsibleInfo.phone,
         email: formData.responsibleInfo.email,
+        amount: this.registrationAmount(),
         paymentLink: '',
       };
+
+      const isDiscountDocument = DISCOUNT_DOCUMENTS.includes(paymentData.cpf);
+      if (isDiscountDocument) {
+        this.registrationAmount.set(150.0);
+        paymentData.amount = this.registrationAmount();
+      }
 
       formData.payment = paymentData;
 
