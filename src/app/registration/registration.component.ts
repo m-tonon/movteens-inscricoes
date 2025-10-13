@@ -202,6 +202,7 @@ export class RegistrationComponent implements OnInit {
         cpf: formData.responsibleInfo.document.replace(/\D/g, ''),
         phone: formData.responsibleInfo.phone,
         email: formData.responsibleInfo.email,
+        paymentLink: '',
       };
 
       formData.payment = paymentData;
@@ -213,6 +214,8 @@ export class RegistrationComponent implements OnInit {
             const payLink = response.links.find((r) => r.rel === 'PAY');
             if (payLink && payLink.href) {
               this.checkoutUrl = payLink.href;
+              formData.payment.paymentLink = this.checkoutUrl;
+
               return this.registrationService.saveRegistration(formData);
             } else {
               throw new Error('PAY link not found in response.');

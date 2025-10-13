@@ -5,6 +5,7 @@ export interface PaymentData {
   cpf: string;
   email?: string;
   phone?: string;
+  paymentLink?: string;
 }
 
 export interface RegistrationFormData {
