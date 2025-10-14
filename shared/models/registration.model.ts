@@ -7,6 +7,7 @@ const PaymentDataSchema = new mongoose.Schema({
   cpf: String,
   email: String,
   phone: String,
+  paymentLink: String,
 }, { _id: false });
 
 const RegistrationSchema = new mongoose.Schema({
