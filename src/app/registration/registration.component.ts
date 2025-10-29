@@ -82,7 +82,7 @@ export class RegistrationComponent implements OnInit {
   acknowledgmentForm!: FormGroup;
 
   registrationAmount = signal<number>(250.0);
-  isEndedRegistration = signal(false);
+  isEndedRegistration = signal(true);
   isRegistrationComplete = signal(false);
   isPaymentConfirmed = signal(false);
   isLoading = signal(false);
